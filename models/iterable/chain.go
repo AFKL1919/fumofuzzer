@@ -2,6 +2,7 @@ package iterable
 
 import (
 	"afkl/fumofuzzer/models/payload"
+	"log"
 )
 
 type ChainIterator struct {
@@ -19,6 +20,9 @@ func NewChainIterator() *ChainIterator {
 }
 
 func (iter *ChainIterator) Exec(Payloads []payload.Payload) {
+	if len(Payloads) == 0 {
+		log.Fatalf("Payloads Num is 0")
+	}
 	go func() {
 		defer close(iter.channel)
 		for _, payload := range Payloads {
@@ -49,4 +53,8 @@ func (iter *ChainIterator) Scan() bool {
 
 func (iter *ChainIterator) Value() []string {
 	return iter.token
+}
+
+func (iter *ChainIterator) Channel() chan []string {
+	return iter.channel
 }

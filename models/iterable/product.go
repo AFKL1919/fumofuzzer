@@ -2,6 +2,7 @@ package iterable
 
 import (
 	"afkl/fumofuzzer/models/payload"
+	"log"
 )
 
 type ProductIterator struct {
@@ -40,6 +41,9 @@ func nextIndex(ix []int, lens func(i int) int) {
 }
 
 func (iter *ProductIterator) Exec(Payloads []payload.Payload) {
+	if len(Payloads) == 0 {
+		log.Fatalf("Payloads Num is 0")
+	}
 	go func() {
 		values := make([][]string, 0)
 		defer close(iter.channel)
@@ -70,4 +74,8 @@ func (iter *ProductIterator) Scan() bool {
 
 func (iter *ProductIterator) Value() []string {
 	return iter.token
+}
+
+func (iter *ProductIterator) Channel() chan []string {
+	return iter.channel
 }

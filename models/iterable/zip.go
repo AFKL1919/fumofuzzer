@@ -69,3 +69,7 @@ func (iter *ZipIterator) Scan() bool {
 func (iter *ZipIterator) Value() []string {
 	return iter.token
 }
+
+func (iter *ZipIterator) Channel() chan []string {
+	return iter.channel
+}

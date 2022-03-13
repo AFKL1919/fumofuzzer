@@ -40,12 +40,12 @@ func selectFilter(filterType string) filter.PayloadFilter {
 	}
 }
 
-func NewPayload(sourceData string) *Payload {
+func NewPayload(sourceData string) Payload {
 
 	var (
 		loaderValue    string
 		loaderType     string
-		payloadp       *Payload
+		payloadp       Payload
 		payloadpFitler filter.PayloadFilter
 	)
 
@@ -72,7 +72,7 @@ func NewPayload(sourceData string) *Payload {
 	}
 
 	if loader, ok := PAYLOAD_LOADER_MAP[loaderType]; ok {
-		payloadp = &Payload{
+		payloadp = Payload{
 			Loader: loader,
 			Filter: payloadpFitler,
 		}

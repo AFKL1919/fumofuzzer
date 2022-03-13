@@ -9,4 +9,11 @@ type BaseIterator interface {
 	Scan() bool
 	Value() []string
 	Exec(Payloads []payload.Payload)
+	Channel() chan []string
+}
+
+var ITER_MAP = map[string]BaseIterator{
+	"chain":   NewChainIterator(),
+	"zip":     NewZipIterator(),
+	"product": NewProductIterator(),
 }
