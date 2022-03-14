@@ -20,7 +20,8 @@ var PAYLOAD_FILTER_MAP = map[string]filter.PayloadFilter{
 }
 
 type Payload struct {
-	Value []string
+	Original string
+	Value    []string
 
 	Loader loader.PayloadLoader
 	Filter filter.PayloadFilter
@@ -40,12 +41,12 @@ func selectFilter(filterType string) filter.PayloadFilter {
 	}
 }
 
-func NewPayload(sourceData string) *Payload {
+func NewPayload(sourceData string) Payload {
 
 	var (
 		loaderValue    string
 		loaderType     string
-		payloadp       *Payload
+		payloadp       Payload
 		payloadpFitler filter.PayloadFilter
 	)
 
@@ -72,9 +73,10 @@ func NewPayload(sourceData string) *Payload {
 	}
 
 	if loader, ok := PAYLOAD_LOADER_MAP[loaderType]; ok {
-		payloadp = &Payload{
-			Loader: loader,
-			Filter: payloadpFitler,
+		payloadp = Payload{
+			Original: sourceData,
+			Loader:   loader,
+			Filter:   payloadpFitler,
 		}
 	} else {
 		log.Fatalf("Unknown Error in Paser: %s\n", sourceData)
