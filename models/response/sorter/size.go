@@ -26,8 +26,7 @@ func (sortp SizeSorter) Swap(i, j int) {
 	sortp.FuzzedResps[i], sortp.FuzzedResps[j] = sortp.FuzzedResps[j], sortp.FuzzedResps[i]
 }
 
-func (sortp SizeSorter) Sort(resps []resty.Response) []resty.Response {
+func (sortp SizeSorter) Sort(resps []resty.Response) {
 	sortp.setFuzzedResps(resps)
 	sort.Sort(sortp)
-	return sortp.FuzzedResps
 }

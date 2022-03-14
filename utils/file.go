@@ -22,6 +22,10 @@ func Open(filename string) (*File, error) {
 	return file, nil
 }
 
+func (file *File) Write(data string) (int, error) {
+	return file.Fp.WriteString(data)
+}
+
 func (file *File) ReadLine() (string, bool) {
 	if file.Scan.Scan() {
 		return file.Scan.Text(), true

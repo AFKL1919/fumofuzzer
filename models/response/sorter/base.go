@@ -6,7 +6,11 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-type BaseSorter interface {
+var SORTER_MAP = map[string]Sorter{
+	"size": new(SizeSorter),
+}
+
+type Sorter interface {
 	sort.Interface
-	Sort([]resty.Response) []resty.Response
+	Sort([]resty.Response)
 }

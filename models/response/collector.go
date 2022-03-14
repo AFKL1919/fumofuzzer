@@ -1,13 +1,10 @@
 package response
 
 import (
-	"sync"
-
 	"github.com/go-resty/resty/v2"
 )
 
 type FuzzResponseCollector struct {
-	*sync.Mutex
 	FuzzResps   *FuzzResponses
 	RespChannel chan *resty.Response
 }

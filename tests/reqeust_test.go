@@ -6,6 +6,7 @@ import (
 	"afkl/fumofuzzer/models/request"
 	"afkl/fumofuzzer/models/response"
 	"afkl/fumofuzzer/models/response/sorter"
+	"encoding/json"
 	"log"
 	"testing"
 
@@ -17,8 +18,20 @@ func TestResty(t *testing.T) {
 	resp, _ := client.
 		R().
 		SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.7113.93 Safari/537.36").
-		Get("http://127.0.0.1:9999")
-	log.Println(resp)
+		Get("http://127.0.0.1:9000")
+
+	m := map[string]interface{}{
+		"body":   resp.String(),
+		"header": resp.Header(),
+	}
+	ms := []map[string]interface{}{
+		m,
+	}
+	data, err := json.Marshal(ms)
+	if err != nil {
+		t.Error(err.Error())
+	}
+	log.Println(string(data))
 }
 
 func TestNewPayload(t *testing.T) {
@@ -128,7 +141,7 @@ func TestSome(t *testing.T) {
 	)
 
 	sort := new(sorter.SizeSorter)
-	resps := response.NewFuzzResponses(sort)
+	resps := response.NewFuzzResponses(sort, nil)
 
 	coll := response.NewFuzzResponseCollector(resps)
 	coll.ExecCollector()
