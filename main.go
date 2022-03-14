@@ -5,6 +5,8 @@ import (
 	"afkl/fumofuzzer/models/iterable"
 	"afkl/fumofuzzer/models/payload"
 	"afkl/fumofuzzer/models/request"
+	"afkl/fumofuzzer/models/response"
+	"afkl/fumofuzzer/models/response/sorter"
 	"log"
 	"os"
 
@@ -54,9 +56,18 @@ func main() {
 				iter,
 			)
 
-			pool.Submit(temp)
+			sort := new(sorter.SizeSorter)
+			resps := &response.FuzzResponses{
+				Sorter: sort,
+			}
+
+			coll := response.NewFuzzResponseCollector(resps)
+			coll.ExecCollector()
+
+			pool.Submit(temp, coll)
 			pool.Wait()
 			pool.Close()
+
 		} else {
 			log.Println(assets.NobodySeeingKoishi)
 		}

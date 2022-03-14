@@ -1,6 +1,7 @@
 package request
 
 import (
+	"afkl/fumofuzzer/models/response"
 	"log"
 	"sync"
 
@@ -21,7 +22,7 @@ func (pool *RequetsPool) Close() {
 	pool.Pool.Release()
 }
 
-func (pool *RequetsPool) Submit(fuzz *FuzzRequestTemplate) {
+func (pool *RequetsPool) Submit(fuzz *FuzzRequestTemplate, coll response.FuzzResponseCollector) {
 	TaskWaitGroup.Add(1)
 	defer TaskWaitGroup.Done()
 
@@ -39,7 +40,7 @@ func (pool *RequetsPool) Submit(fuzz *FuzzRequestTemplate) {
 	for {
 		data, alive := <-fuzz.Iterator.Channel()
 		if alive {
-			reqChan <- fuzz.GenerateFuzzRequest(data)
+			reqChan <- fuzz.GenerateFuzzRequest(data, coll)
 			TaskWaitGroup.Add(1)
 		} else {
 			break
@@ -57,9 +58,11 @@ func FuzzRequestWorker(fuzzReqInterface interface{}) {
 
 	resp, err := fuzzReq.Request.Send()
 	if err != nil {
+		// fuzzReq.Channel() <- resp
 		log.Printf("%v => [ERR]%s\n", fuzzReq.Data, resp.Request.URL)
 	} else {
-		log.Printf("%v => [%d]%s\n", fuzzReq.Data, resp.StatusCode(), resp.Request.URL)
+		fuzzReq.collector.Channel() <- resp
+		// log.Printf("%v => [%d]%s\n", fuzzReq.Data, resp.StatusCode(), resp.Request.URL)
 	}
 }
 

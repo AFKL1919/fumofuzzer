@@ -3,6 +3,7 @@ package request
 import (
 	"afkl/fumofuzzer/models/iterable"
 	"afkl/fumofuzzer/models/payload"
+	"afkl/fumofuzzer/models/response"
 	"fmt"
 	"log"
 	"math/rand"
@@ -83,7 +84,13 @@ func NewFuzzRequestTemplate(
 	}
 }
 
-func (fuzz FuzzRequestTemplate) GenerateFuzzRequest(FuzzData []string) *FuzzRequest {
+type FuzzRequest struct {
+	Data      []string
+	Request   *resty.Request
+	collector response.FuzzResponseCollector
+}
+
+func (fuzz FuzzRequestTemplate) GenerateFuzzRequest(FuzzData []string, coll response.FuzzResponseCollector) *FuzzRequest {
 	url := fuzz.TargetUrl
 	body := fuzz.TargetBody
 	headers := fuzz.TargetHeaders
@@ -136,12 +143,8 @@ func (fuzz FuzzRequestTemplate) GenerateFuzzRequest(FuzzData []string) *FuzzRequ
 	request.SetHeader("User-Agent", UA_LIST[rand.Intn(4)])
 
 	return &FuzzRequest{
-		Data:    FuzzData,
-		Request: request,
+		Data:      FuzzData,
+		Request:   request,
+		collector: coll,
 	}
-}
-
-type FuzzRequest struct {
-	Data    []string
-	Request *resty.Request
 }
