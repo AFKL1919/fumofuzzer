@@ -34,7 +34,6 @@ Q: FUMO?
 A: FUMO
 
 # known problem
-1. sort排序成功。但json并未按照顺序输出。
-2. json格式输出的数据有待完善。
-3. 缺少类似于`wfuzz`可以在命令行输出表格的格式。
-4. 对于`FUZZ`其他地方（如：json、method...）的支持。
+1. json格式输出的数据有待完善。
+2. 缺少类似于`wfuzz`可以在命令行输出表格的格式。
+3. 对于`FUZZ`其他地方（如：json、method...）的支持。

@@ -15,6 +15,7 @@ func (formatter JsonFormatter) Exec(temp request.FuzzRequestTemplate, result res
 
 	for respID, resp := range result.FuzzedResponses {
 		map0 := map[string]interface{}{
+			"url":    resp.Request.URL,
 			"status": resp.StatusCode(),
 			"body":   resp.String(),
 			"header": resp.Header(),
